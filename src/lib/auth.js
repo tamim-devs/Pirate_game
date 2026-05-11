@@ -1,12 +1,25 @@
-import { betterAuth } from "better-auth"
-import { MongoClient } from "mongodb"
-import { mongodbAdapter } from "better-auth/adapters/mongodb"
+import { betterAuth } from "better-auth";
+import { MongoClient } from "mongodb";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI)
+const uri = process.env.MONGODB_URI;
 
-await client.connect()
+if (!uri) {
+  throw new Error("MONGODB_URI is missing in environment variables");
+}
 
-const db = client.db("pirate_game")
+const client = new MongoClient(uri);
+
+// IMPORTANT: don't connect at build time
+let db;
+
+async function getDb() {
+  if (!db) {
+    await client.connect();
+    db = client.db("pirate_game");
+  }
+  return db;
+}
 
 export const auth = betterAuth({
   emailAndPassword: {
@@ -15,12 +28,12 @@ export const auth = betterAuth({
 
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
   },
 
-  database: mongodbAdapter(db, {
+  database: mongodbAdapter(await getDb(), {
     client,
   }),
-})
+});
