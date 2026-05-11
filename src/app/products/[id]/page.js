@@ -7,23 +7,23 @@ const GameDetailsPage = async ({ params }) => {
   const { id } = params;
 
   try {
-    const res = await fetch(
-      `https://www.freetogame.com/api/game?id=${id}`,
-      { cache: "no-store" }
-    );
+   const res = await fetch("https://www.freetogame.com/api/games", {
+  cache: "no-store",
+});
 
-    if (!res.ok) throw new Error("API failed");
+if (!res.ok) throw new Error("API failed");
 
-    const game = await res.json();
+const games = await res.json();
 
-   
-    if (!game || !game.id) {
-      return (
-        <div className="text-center text-red-500 text-xl mt-10">
-          Game not found
-        </div>
-      );
-    }
+const game = games.find((g) => Number(g.id) === Number(id));
+
+if (!game) {
+  return (
+    <div className="text-center text-red-500 text-xl mt-10">
+      Game not found
+    </div>
+  );
+}
 
     const image =
       typeof game.thumbnail === "string" && game.thumbnail.startsWith("http")
