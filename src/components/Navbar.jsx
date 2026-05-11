@@ -1,14 +1,11 @@
 "use client";
-import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import Link from "next/link";
 import {Avatar, Button} from "@heroui/react";
 const Navbar = () => {
-  const userData = authClient.useSession();
-  const user = userData.data?.user;
-  console.log(user,"user data in navbar")
+
   const handleSignOut = async () => {
-    await authClient.signOut();
+  
   }
   return (
     <div className="border-b px-2">
@@ -18,11 +15,11 @@ const Navbar = () => {
             src={"/logo.png"}
             alt="logo"
             loading="eager"
-            width={30}
-            height={30}
+            width={50}
+            height={50}
             className="object-cover h-auto w-auto"
           />
-          <h3 className="font-black text-lg">Pirate Games</h3>
+          <h3 className="font-black text-lg">Pirate Game</h3>
         </div>
 
         <ul className="flex items-center gap-5 text-sm">
@@ -30,19 +27,16 @@ const Navbar = () => {
             <Link href={"/"}>Home</Link>
           </li>
           <li>
-            <Link href={"/all-photos"}>All Photos</Link>
+            <Link href={"/products"}>All Products</Link>
           </li>
-          <li>
-            <Link href={"/pricing"}>Pricing</Link>
-          </li>
+          
           <li>
             <Link href={"/profile"}>Profile</Link>
           </li>
         </ul>
 
         <div className="flex gap-4">
-    {!user && (
-  <ul className="flex items-center  gap-4 text-sm">
+           <ul className="flex items-center  gap-4 text-sm">
             <li>
               <Link className="hover:underline" href={"/signup"}>SignUp</Link>
             </li>
@@ -50,20 +44,6 @@ const Navbar = () => {
               <Link className="hover:underline" href={"/signin"}>SignIn</Link>
             </li>
           </ul>
-    )}
-
-    {user && (
-      <div className="flex items-center gap-4">
-        <Avatar>
-        <Avatar.Image alt="John Doe" src={user?.image}
-        referrerPolicy="no-referrer" />
-        <Avatar.Fallback>{user?.name?.charAt(0)}</Avatar.Fallback>
-      </Avatar>
-      <Button onClick={handleSignOut} variant="tertiary">
-        Sign Out
-      </Button>
-      </div>
-    )}
         
         </div>
       </nav>
@@ -71,4 +51,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar
+export default Navbar;
