@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import DownloadButton from "@/components/DownloadButton";
 import { Chip } from "@heroui/react";
 import Image from "next/image";
 import React from "react";
@@ -55,6 +56,7 @@ const GameDetailsPage = async ({ params }) => {
             <p className="text-gray-500 mb-6">
               {game.short_description}
             </p>
+            <DownloadButton title={game.title} />
           </div>
         </div>
       </div>
