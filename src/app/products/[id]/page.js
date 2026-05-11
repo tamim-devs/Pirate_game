@@ -21,10 +21,9 @@ const GameDetailsPage = async ({ params }) => {
       throw new Error("Invalid data");
     }
 
-    const game = games.find(function (g) {
-      return String(g.id) === String(id);
-    });
-
+const game = games.find(function (g) {
+  return Number(g.id) === Number(id);
+});
     if (!game) {
       return (
         <div className="text-center text-red-500 text-xl mt-10">
