@@ -2,9 +2,12 @@ import GameCard from '@/components/GameCard'
 import React from 'react'
 
 const TopGames = async() => {
-     const res = await fetch('https://www.freetogame.com/api/games')
+const res = await fetch('https://www.freetogame.com/api/games', {
+  cache: "no-store"
+});
     const games = await res.json()
     const topGames = games.slice(0, 8)
+  
     console.log(topGames)
   return (
     <div>

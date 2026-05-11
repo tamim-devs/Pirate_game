@@ -6,7 +6,11 @@ import { IoDownload } from 'react-icons/io5'
 
 const GameCard = ({game}) => {
     console.log(game,"game")
-  return (
+const image =
+    typeof game?.thumbnail === "string" && game.thumbnail.startsWith("http")
+      ? game.thumbnail
+      : "/placeholder.jpg";
+        return (
     <div>
         <Card>
         <div className='border rounded-xl'>
@@ -15,7 +19,7 @@ const GameCard = ({game}) => {
            
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            src={game?.thumbnail}
+            src={image}
             alt={game?.title}
             className='object-cover rounded-xl'
             />
