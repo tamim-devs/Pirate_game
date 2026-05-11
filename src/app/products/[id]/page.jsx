@@ -7,14 +7,14 @@ const GameDetailsPage = async ({ params }) => {
   const { id } = params;
 
 
-  const res = await fetch("https://www.freetogame.com/api/games", {
+  const res = await fetch(`https://www.freetogame.com/api/game?id=${id}`, {
     cache: "no-store",
   });
 
   const games = await res.json();
 
 
-  const game = games.find((g) => g.id == id);
+const game = games.find((g) => String(g.id) === String(id));
 
 
   if (!game) {
