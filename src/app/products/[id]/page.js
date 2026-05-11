@@ -1,4 +1,3 @@
-import DownloadButton from "@/components/DownloadButton";
 import { Chip } from "@heroui/react";
 import Image from "next/image";
 import React from "react";
@@ -7,23 +6,37 @@ const GameDetailsPage = async ({ params }) => {
   const { id } = params;
 
   try {
-   const res = await fetch("https://www.freetogame.com/api/games", {
-  cache: "no-store",
-});
+    const res = await fetch("https://www.freetogame.com/api/games", {
+      cache: "no-store",
+    });
 
-if (!res.ok) throw new Error("API failed");
+    if (!res.ok) {
+      return (
+        <div className="text-center text-red-500 text-xl mt-10">
+          Server Error
+        </div>
+      );
+    }
 
-const games = await res.json();
+    const games = await res.json();
 
-const game = games.find((g) => Number(g.id) === Number(id));
+    if (!Array.isArray(games)) {
+      return (
+        <div className="text-center text-red-500 text-xl mt-10">
+          Server Error
+        </div>
+      );
+    }
 
-if (!game) {
-  return (
-    <div className="text-center text-red-500 text-xl mt-10">
-      Game not found
-    </div>
-  );
-}
+    const game = games.find((g) => Number(g.id) === Number(id));
+
+    if (!game) {
+      return (
+        <div className="text-center text-red-500 text-xl mt-10">
+          Game not found
+        </div>
+      );
+    }
 
     const image =
       typeof game.thumbnail === "string" && game.thumbnail.startsWith("http")
@@ -36,7 +49,6 @@ if (!game) {
 
         <div className="max-w-7xl mx-auto px-4 py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center border rounded-3xl p-6 shadow-lg bg-white">
-
             <div className="relative w-full h-[400px] rounded-3xl overflow-hidden">
               <Image
                 src={image}
@@ -57,7 +69,6 @@ if (!game) {
                 {game.short_description}
               </p>
             </div>
-
           </div>
         </div>
       </div>
@@ -71,5 +82,4 @@ if (!game) {
   }
 };
 
-export default GameDetailsPage;;
-
+export default GameDetailsPage;
