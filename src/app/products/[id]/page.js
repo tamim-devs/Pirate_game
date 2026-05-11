@@ -28,7 +28,7 @@ const GameDetailsPage = async ({ params }) => {
       );
     }
 
-    const game = games.find((g) => Number(g.id) === Number(id));
+    const game = games.find((g) => String(g.id) === String(id));
 
     if (!game) {
       return (
@@ -39,7 +39,7 @@ const GameDetailsPage = async ({ params }) => {
     }
 
     const image =
-      typeof game.thumbnail === "string" && game.thumbnail.startsWith("http")
+      game.thumbnail && game.thumbnail.startsWith("http")
         ? game.thumbnail
         : "/placeholder.jpg";
 
@@ -59,21 +59,21 @@ const GameDetailsPage = async ({ params }) => {
             </div>
 
             <div>
-              <Chip className="mb-4">{game.genre}</Chip>
+              <Chip className="mb-4">{game.genre || "N/A"}</Chip>
 
               <h1 className="text-5xl font-extrabold mb-4">
                 {game.title}
               </h1>
 
               <p className="text-gray-500 mb-6">
-                {game.short_description}
+                {game.short_description || "No description"}
               </p>
             </div>
           </div>
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     return (
       <div className="text-center text-red-500 text-xl mt-10">
         Server Error
