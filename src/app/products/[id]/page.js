@@ -7,23 +7,24 @@ const GameDetailsPage = async ({ params }) => {
   const { id } = params;
 
   try {
-    // ✅ FIX: correct API (single game endpoint না থাকলে list use)
-    const res = await fetch(
-      "https://www.freetogame.com/api/games",
-      {
-        cache: "no-store",
-      }
-    );
+    const res = await fetch("https://www.freetogame.com/api/games", {
+      cache: "no-store",
+    });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch games");
+      throw new Error("API failed");
     }
 
     const games = await res.json();
 
-    const game = games.find((g) => String(g.id) === String(id));
+    if (!Array.isArray(games)) {
+      throw new Error("Invalid data");
+    }
 
-    // ❌ game not found
+    const game = games.find(function (g) {
+      return String(g.id) === String(id);
+    });
+
     if (!game) {
       return (
         <div className="text-center text-red-500 text-xl mt-10">
@@ -45,7 +46,6 @@ const GameDetailsPage = async ({ params }) => {
         <div className="max-w-7xl mx-auto px-4 py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center border rounded-3xl p-6 shadow-lg bg-white">
 
-            {/* Image */}
             <div className="relative w-full h-[400px] rounded-3xl overflow-hidden">
               <Image
                 src={image}
@@ -55,7 +55,6 @@ const GameDetailsPage = async ({ params }) => {
               />
             </div>
 
-            {/* Content */}
             <div>
               <Chip color="primary" variant="flat" className="mb-4">
                 {game.genre || "N/A"}
@@ -103,6 +102,7 @@ const GameDetailsPage = async ({ params }) => {
         </div>
       </div>
     );
+
   } catch (error) {
     return (
       <div className="text-center text-red-500 text-xl mt-10">
